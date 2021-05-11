@@ -6,10 +6,18 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>AB-Book</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+    <style>
+        .table{
+            width: 90%;
+            margin: 100px auto;
+        }
+    </style>
 </head>
 <body>
-<table>
-    <thead>
+<div class="table-responsive">
+<table class="table table-bordered">
+    <thead class="thead-dark">
     <tr>
         <th>Book Title</th>
         <th>Authors</th>
@@ -59,5 +67,6 @@
     ?>
     </tbody>
 </table>
+</div>
 </body>
 </html>
