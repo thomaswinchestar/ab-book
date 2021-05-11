@@ -1,5 +1,5 @@
 <?php
-$link = mysqli_connect('localhost', 'root', '', 'ab_book');
-if ($link === false) {
-    die("ERROR: Could not connect. " . mysqli_connect_error());
+$pdo = new PDO('mysql:host=localhost;dbname=ab_book', 'root', '');
+if ($pdo === false) {
+    die('ERROR: Could not connect. ' . mysqli_connect_error());
 }

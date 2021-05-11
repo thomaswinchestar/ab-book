@@ -10,3 +10,14 @@ function str_lreplace($search, $replace, $subject)
 
     return $subject;
 }
+
+function dd($value)
+{
+    echo '<pre>';
+    die(var_dump($value));
+}
+function dump($value)
+{
+    echo '<pre>';
+    (var_dump($value));
+}

@@ -16,58 +16,47 @@
     </tr>
     </thead>
     <tbody>
-
     <?php
-    include "db.php";
-    include "function.php";
+    include 'db.php';
+    include 'function.php';
 
-    $ab_book_sql = "SELECT * FROM book";
-    $ab_book_result = mysqli_query($link, $ab_book_sql);
-    $authors = [];
-    while ($ab_book = mysqli_fetch_assoc($ab_book_result)) {
-        $book_id = $ab_book['id'];
-        $book_title = $ab_book['title'];
-
-        ?>
-        <tr>
-            <td><?php echo $book_title; ?></td>
-            <td>
-                <?php
-                $book_author_sql = "SELECT * FROM book_authors WHERE book_id = $book_id";
-                $book_author_result = mysqli_query($link, $book_author_sql);
-                $book_author_row_count = mysqli_num_rows($book_author_result);
-                $last_author_count = $book_author_row_count - 1;
-
-                while ($book_author_row = mysqli_fetch_assoc($book_author_result)) {
-
-                    $author_id = $book_author_row['author_id'];
-                    $author_sql = "SELECT `name` FROM author WHERE id = $author_id";
-                    $author_result = mysqli_query($link, $author_sql);
-                    $author_row = mysqli_fetch_assoc($author_result);
-                    $author_name = $author_row['name'];
-                    $authors[]=$author_name;
-                    echo "<pre>";
-                    var_dump($authors);
-                    echo $author_name;
-//                    $FormatString = implode(' , ', $author_row);
-//
-//                    if (count($author_row) >= 2) {
-//                        $FormatString = str_lreplace(',', ' and ', $FormatString);
-//                    }
-//
-//                    echo $FormatString;
-
-
-                }
-                ?>
-
-            </td>
-        </tr>
-        <?php
-    }
-
+    $ab_book_sql = 'SELECT * FROM book';
+    $res = $pdo->query('select * from book order by title');
+    $res->execute() ;
+    $books = $res->fetchAll(PDO::FETCH_ASSOC);
+    foreach ($books as $book):
     ?>
+    <tr>
+            <td><?php echo $book['title']; ?></td>
+            <td>
+            <?php
 
+               $query = 'SELECT * FROM book_authors WHERE book_id = ?';
+               $res = $pdo->prepare($query);
+               $res->execute([$book['id']]);
+               $book_author_relations = $res->fetchAll(PDO::FETCH_OBJ);
+               $authorNames = [];
+                foreach ($book_author_relations as $book_author_relation) {
+                    $query = 'select name from author where id=? ';
+                    $res = $pdo->prepare($query);
+                    $res->execute([$book_author_relation->author_id]);
+                    $authors = $res->fetchAll(PDO::FETCH_OBJ);
+                    $authorNames[] = $authors[0]->name;
+                }
+                // sort name by alphabet
+                sort($authorNames);
+
+                $formatName = implode(' , ', $authorNames);
+                if (count($authorNames) >= 2) {
+                    $formatName = str_lreplace(',', ' and ', $formatName);
+                }
+                echo $formatName;
+            ?>
+            </td>
+    </tr>
+    <?php
+       endforeach;
+    ?>
     </tbody>
 </table>
 </body>
